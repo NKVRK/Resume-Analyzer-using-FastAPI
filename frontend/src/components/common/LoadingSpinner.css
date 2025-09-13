@@ -1,0 +1,33 @@
+/* The container centers the spinner and its text vertically and horizontally. */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: #555;
+}
+
+/* This defines the animation itself - a full 360-degree rotation. */
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* This is the spinner element. */
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  /* The grey border forms the main circle track. */
+  border: 6px solid #f3f3f3;
+  /* The blue border-top is the part that looks like it's spinning. */
+  border-top: 6px solid #3498db;
+  border-radius: 50%; /* Makes it a circle. */
+  /* Apply the animation we defined above. */
+  animation: spinner 1.5s linear infinite;
+  margin-bottom: 20px;
+}

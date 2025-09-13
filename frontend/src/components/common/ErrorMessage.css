@@ -1,0 +1,9 @@
+.error-message {
+  border: 1px solid #e57373; /* A soft red border */
+  background-color: #ffebee; /* A very light red background */
+  color: #c62828; /* A darker, more readable red for the text */
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+  text-align: left; /* Errors are usually better left-aligned */
+}

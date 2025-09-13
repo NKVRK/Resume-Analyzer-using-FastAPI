@@ -1,0 +1,181 @@
+/* The main container for the whole app, just centers the content. */
+.App {
+  text-align: center;
+}
+
+/* Header section - gives it a card-like feel and separates it from the content. */
+.App-header {
+  background-color: var(--card-background);
+  padding: 40px 20px;
+  box-shadow: var(--shadow);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Main title in the header. */
+.App-header h1 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 2.8rem;
+  font-weight: 600;
+}
+
+/* The little subtitle/tagline. */
+.App-header p {
+  color: var(--subtle-text);
+  font-size: 1.2rem;
+  margin-top: 8px;
+}
+
+/* The navigation bar for switching between "Upload" and "History". */
+.App-nav {
+  margin: 40px 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Styling for the nav buttons - making them look like pills. */
+.App-nav button {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  padding: 12px 25px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--subtle-text);
+  border-radius: 50px; /* This gives it the pill shape */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* A little visual feedback when you hover over a nav button. */
+.App-nav button:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Style for the currently active nav button. */
+.App-nav button.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+/* This is the main content box where the tabs' content will show up. */
+.App-main {
+  max-width: 900px;
+  margin: 0 auto 40px auto; /* Centers the box on the page */
+  padding: 40px;
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+/* A general style for all buttons to keep them consistent. */
+button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  display: inline-flex; /* Helps align icons inside buttons */
+  align-items: center;
+  gap: 8px;
+}
+
+/* What a button looks like when it's disabled. */
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Basic table styling. */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+/* Cell styles - padding and a bottom border for separation. */
+th, td {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+
+/* Making the table header stand out a bit. */
+th {
+  background-color: #F8F9FA;
+  font-weight: 600;
+  color: var(--subtle-text);
+}
+
+/* A nice hover effect on table rows for better readability. */
+tbody tr:hover {
+  background-color: #F8F9FA;
+}
+
+/* This container ensures the table can scroll horizontally on small screens. */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smoother scrolling on iOS */
+}
+
+/* --- Responsive Design --- */
+/* Adjustments for screens 768px wide or smaller (tablets/phones). */
+@media (max-width: 768px) {
+  .App-header {
+    padding: 30px 15px;
+  }
+
+  .App-header h1 {
+    font-size: 2rem;
+  }
+
+  .App-header p {
+    font-size: 1rem;
+  }
+
+  .App-nav {
+    margin: 30px 0;
+    gap: 10px;
+  }
+
+  .App-nav button {
+    padding: 10px 15px;
+    font-size: 1rem;
+  }
+
+  .App-main {
+    padding: 20px;
+    margin: 0 15px 30px 15px;
+  }
+  
+  /* Smaller text in tables on mobile */
+  th, td {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+/* --- Table Specifics --- */
+
+/* A container for action buttons inside a table cell (like delete/edit). */
+.actions-cell {
+  display: flex;
+  gap: 10px;
+}
+
+/* The delete button gets a red color to warn the user. */
+.delete-button {
+  background-color: #E57373;
+}
+
+/* Darken the red on hover. */
+.delete-button:hover {
+  background-color: #D32F2F;
+}

@@ -1,0 +1,165 @@
+.resume-display {
+  margin-top: 40px;
+  text-align: left;
+}
+.resume-display h2 {
+  color: var(--text-color);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
+/* A simple grid for the main analysis cards */
+.display-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+/* Base styles for all cards */
+.card {
+  background: var(--card-background);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+/* A little lift effect on hover */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+}
+.card h3 {
+  margin-top: 0;
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+/* Special styling for the main rating card to center its content */
+.rating-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  grid-column: 1 / -1; /* Makes it span the full width of the grid */
+}
+/* The circular progress bar for the rating */
+.rating-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  /* This is the magic! It uses a conic gradient and a CSS variable from the JS
+     to create the progress effect. The variable is a score out of 10, so we multiply by 36 (360/10). */
+  background: conic-gradient(var(--primary-color) 0deg, var(--primary-color) calc(var(--rating, 0) * 36deg), #EAECEF calc(var(--rating, 0) * 36deg), #EAECEF 360deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+/* The inner circle that shows the score text */
+.rating-score {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  background: var(--card-background);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+.card li {
+  padding: 10px 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+.card li:last-child {
+  border-bottom: none;
+}
+/* Container for the skill tags */
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+/* Individual skill tags */
+.skill-tag {
+  background-color: #EBF5FF;
+  color: var(--primary-color);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+/* Grid for contact info (email, phone, etc.) */
+.contact-info-grid {
+  display: grid;
+  /* This makes the grid responsive - it fits as many columns as it can
+     that are at least 250px wide. */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #F8F9FA;
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: var(--subtle-text);
+  font-size: 0.95rem;
+}
+
+.info-icon {
+  color: var(--primary-color);
+  flex-shrink: 0; /* Prevents the icon from shrinking if the text is long */
+}
+
+.card h4 {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .display-grid {
+    /* Stack the grid columns on mobile */
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .resume-display h2 {
+    font-size: 1.5rem;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  /* Make the rating circle a bit smaller on mobile */
+  .rating-circle {
+    width: 100px;
+    height: 100px;
+  }
+  .rating-score {
+    width: 85px;
+    height: 85px;
+    font-size: 2rem;
+  }
+}

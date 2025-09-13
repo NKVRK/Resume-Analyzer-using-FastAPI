@@ -1,0 +1,45 @@
+/* The dark, semi-transparent background that covers the whole page. */
+.modal-overlay {
+  position: fixed; /* Sits on top of everything */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7); /* Darkens the page content behind it */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures it's on top of other content */
+}
+
+/* The white box that holds the modal's content. */
+.modal-content {
+  background: #f4f7f9; /* A slightly off-white, softer background */
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh; /* Prevents the modal from being taller than the screen */
+  overflow-y: auto; /* Adds a scrollbar if the content is too long */
+  position: relative; /* Needed so we can position the close button inside it */
+}
+
+/* The 'X' button to close the modal. */
+.modal-close-button {
+  position: absolute; /* Positioned relative to the modal-content box */
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #888;
+  line-height: 1; /* Helps with vertical alignment */
+}
+
+/* On smaller screens, reduce the padding to give content more space. */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 20px;
+  }
+}
