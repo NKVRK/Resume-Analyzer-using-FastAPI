@@ -71,7 +71,7 @@ const HistoryTab = ({ active }) => {
   };
 
   // Show a loading spinner while data is being fetched.
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) return <LoadingSpinner message="Loading submission history..." />;
 
   // If there was an error, show the error message instead of the table.
   if (error && resumes.length === 0) return <ErrorMessage message={error} />;

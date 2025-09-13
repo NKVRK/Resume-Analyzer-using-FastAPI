@@ -162,7 +162,7 @@ const UploadTab = () => {
       )}
 
       {/* These are shown outside the main conditional so they can overlay the content. */}
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <LoadingSpinner message="Analyzing resume..." />}
       {error && <ErrorMessage message={error} />}
     </div>
   );

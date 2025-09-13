@@ -32,3 +32,4 @@ class Resume(Base):
     
     # A JSON column to store the qualitative analysis from the LLM,
     # like the rating, improvement areas, and upskill suggestions.
+    llm_analysis = Column(JSON)   
