@@ -5,9 +5,6 @@ import time
 import functools
 from ..core.config import GEMINI_API_KEY
 
-# Import specific exceptions for robust retry handling
-from google.api_core import exceptions as google_api_exceptions
-
 
 # --- Retry Decorator ---
 def retry_with_backoff(retries=3, initial_delay=2, backoff_factor=2):
@@ -18,31 +15,38 @@ def retry_with_backoff(retries=3, initial_delay=2, backoff_factor=2):
     overloaded or has a hiccup. Instead of failing immediately, this will wait
     and try again a few times.
 
-    This will retry on specific Google API exceptions that are often transient:
-    - ResourceExhausted: Rate limit exceeded.
-    - ServiceUnavailable: Temporary server-side issue.
-    - DeadlineExceeded: Request timed out.
+    This will retry on specific exceptions that are often transient:
+    - APIError: General API error that might be transient
+    - ConnectionError: Network connectivity issues
     """
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             delay = initial_delay
+            last_exception = None
             for i in range(retries):
                 try:
                     # Try to run the function (e.g., our API call)
                     return func(*args, **kwargs)
-                except (
-                    google_api_exceptions.ResourceExhausted,
-                    google_api_exceptions.ServiceUnavailable,
-                    google_api_exceptions.DeadlineExceeded
-                ) as e:
-                    # If we hit one of the specified errors, we don't give up yet.
-                    print(f"LLM call failed with {type(e).__name__}, attempt {i + 1} of {retries}. Retrying in {delay}s...")
-                    time.sleep(delay)
-                    # Increase the delay for the next potential retry.
-                    delay *= backoff_factor
-            # If all retries fail, we finally give up and raise an exception.
-            raise Exception(f"LLM call failed after {retries} retries.")
+                except Exception as e:
+                    # Catch transient errors and retry
+                    error_message = str(e).lower()
+                    is_transient = any(keyword in error_message for keyword in 
+                                     ['rate limit', 'temporarily', 'unavailable', 'timeout', 'connection'])
+                    
+                    if is_transient or isinstance(e, (ConnectionError, TimeoutError)):
+                        last_exception = e
+                        if i < retries - 1:
+                            print(f"LLM call failed with {type(e).__name__}, attempt {i + 1} of {retries}. Retrying in {delay}s...")
+                            time.sleep(delay)
+                            # Increase the delay for the next potential retry.
+                            delay *= backoff_factor
+                        else:
+                            # Last attempt failed
+                            raise Exception(f"LLM call failed after {retries} retries: {str(e)}")
+                    else:
+                        # Non-transient error, fail immediately
+                        raise e
         return wrapper
     return decorator
 
