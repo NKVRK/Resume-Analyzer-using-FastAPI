@@ -3,7 +3,7 @@ uvicorn[standard]
 sqlalchemy
 pydantic[email]
 python-dotenv
-google-generativeai
+google-genai
 pdfplumber
 python-multipart
 gunicorn
