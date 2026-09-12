@@ -47,10 +47,12 @@ async def upload_resume(file: UploadFile = File(...), db: Session = Depends(get_
             raise HTTPException(status_code=400, detail="Could not extract text from PDF. The file might be empty or image-based.")
 
         # Step 2: Use the LLM to pull out structured data like name, email, skills, etc.
-        extracted_data = resume_parser.call_gemini_for_extraction(resume_text)
+        # NOW AWAITING the async function
+        extracted_data = await resume_parser.call_gemini_for_extraction(resume_text)
 
         # Step 3: Use the LLM again, this time for qualitative analysis and suggestions.
-        llm_analysis = resume_parser.call_gemini_for_analysis(extracted_data)
+        # NOW AWAITING the async function
+        llm_analysis = await resume_parser.call_gemini_for_analysis(extracted_data)
 
         # Step 4: Bundle up all the data we want to save in the database.
         resume_data_to_save = {
