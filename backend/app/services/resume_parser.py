@@ -1,5 +1,5 @@
 import pdfplumber
-import google.generativeai as genai
+import google.genai as genai
 import json
 import time
 import functools
@@ -48,9 +48,10 @@ def retry_with_backoff(retries=3, initial_delay=2, backoff_factor=2):
 
 
 # Configure the Gemini API with our key.
-genai.configure(api_key=GEMINI_API_KEY)
+client = genai.Client(api_key=GEMINI_API_KEY)
 # We're using the 'flash' model because it's fast and great for this kind of task.
-model = genai.GenerativeModel('gemini-2.0-flash')
+# Updated to gemini-3.6-flash as gemini-2.0-flash is deprecated.
+model_name = 'models/gemini-3.6-flash'
 
 def parse_pdf_to_text(file_content: bytes) -> str:
     """Extracts text from a PDF file's content using pdfplumber."""
@@ -75,7 +76,7 @@ def call_gemini_for_extraction(resume_text: str) -> dict:
     # This is our prompt engineering. We're telling the AI exactly what to do
     # and what format to use for the response. This is key to getting reliable JSON back.
     prompt = f"""
-    Act as an expert HR recruiter and technical parser. Your task is to extract structured information from the following resume text and return it as a clean, valid JSON object. Do not include any explanatory text or markdown formatting around the JSON.
+    Act as an expert HR recruiter and technical parser. Your task is to extract structured information from the following resume text and return it as a clean, valid JSON object. Do not include any explanations, only the JSON.
 
     The JSON object must have the following schema:
     {{
@@ -109,7 +110,10 @@ def call_gemini_for_extraction(resume_text: str) -> dict:
     ---
     """
     try:
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt
+        )
         # Sometimes the model wraps the JSON in markdown, so we clean that up.
         json_text = response.text.strip().replace("```json", "").replace("```", "")
         return json.loads(json_text)
@@ -143,7 +147,10 @@ def call_gemini_for_analysis(extracted_data: dict) -> dict:
     ---
     """
     try:
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt
+        )
         # Same cleanup as before.
         json_text = response.text.strip().replace("```json", "").replace("```", "")
         return json.loads(json_text)
