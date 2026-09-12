@@ -3,7 +3,13 @@ import google.genai as genai
 import json
 import time
 import functools
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
 from ..core.config import GEMINI_API_KEY
+
+
+# Thread pool for running blocking LLM calls asynchronously
+_executor = ThreadPoolExecutor(max_workers=4)
 
 
 # --- Retry Decorator ---
@@ -72,9 +78,9 @@ def parse_pdf_to_text(file_content: bytes) -> str:
 
 # Apply our new retry decorator to both LLM calls.
 @retry_with_backoff(retries=3, initial_delay=2)
-def call_gemini_for_extraction(resume_text: str) -> dict:
+def _call_gemini_for_extraction_sync(resume_text: str) -> dict:
     """
-    Sends resume text to Gemini for structured data extraction.
+    Synchronous version: Sends resume text to Gemini for structured data extraction.
     Now includes a retry mechanism for transient API errors and rate limits.
     """
     # This is our prompt engineering. We're telling the AI exactly what to do
@@ -131,10 +137,23 @@ def call_gemini_for_extraction(resume_text: str) -> dict:
         # Re-raise the exception to be handled by the retry decorator or the API endpoint.
         raise e
 
-@retry_with_backoff(retries=3, initial_delay=2)
-def call_gemini_for_analysis(extracted_data: dict) -> dict:
+
+async def call_gemini_for_extraction(resume_text: str) -> dict:
     """
-    Sends the extracted JSON data to Gemini for analysis and suggestions.
+    Async wrapper for extraction call. Runs the blocking call in a thread pool.
+    """
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(
+        _executor,
+        _call_gemini_for_extraction_sync,
+        resume_text
+    )
+
+
+@retry_with_backoff(retries=3, initial_delay=2)
+def _call_gemini_for_analysis_sync(extracted_data: dict) -> dict:
+    """
+    Synchronous version: Sends the extracted JSON data to Gemini for analysis and suggestions.
     This second call lets the AI focus on one task at a time, improving quality.
     """
     prompt = f"""
@@ -165,3 +184,15 @@ def call_gemini_for_analysis(extracted_data: dict) -> dict:
         print(f"An unexpected error occurred during Gemini analysis call: {e}")
         # Re-raise the exception to be handled by the retry decorator or the API endpoint
         raise e
+
+
+async def call_gemini_for_analysis(extracted_data: dict) -> dict:
+    """
+    Async wrapper for analysis call. Runs the blocking call in a thread pool.
+    """
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(
+        _executor,
+        _call_gemini_for_analysis_sync,
+        extracted_data
+    )
