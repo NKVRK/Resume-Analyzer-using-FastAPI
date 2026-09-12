@@ -50,7 +50,7 @@ def retry_with_backoff(retries=3, initial_delay=2, backoff_factor=2):
 # Configure the Gemini API with our key.
 genai.configure(api_key=GEMINI_API_KEY)
 # We're using the 'flash' model because it's fast and great for this kind of task.
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-2.0-flash')
 
 def parse_pdf_to_text(file_content: bytes) -> str:
     """Extracts text from a PDF file's content using pdfplumber."""
